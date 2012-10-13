@@ -86,8 +86,10 @@ $.fn.relatedSelects = function( options ){
 				}
 
 				// selected an option considered to be invalid?
-				if( this.value == defaultValue  && index > -1){
-					satisfied.splice(index, 1);
+                if( this.value == defaultValue){
+                    if(index > -1){
+                        satisfied.splice(index, 1);
+                    }
 
 					// reset element
 					self.element
