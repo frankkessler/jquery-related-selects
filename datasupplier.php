@@ -3,9 +3,9 @@
 // simulate that this proccess might take a while so you can see the loadingMessage option work.
 sleep(1);
 
-$stateID = $_GET['stateID'];
-$countyID = $_GET['countyID'];
-$townID = $_GET['townID'];
+$stateID = $_GET['state'];
+$countyID = $_GET['county'];
+$townID = $_GET['town'];
 $html = $_GET['html'];
 
 $states = array();
