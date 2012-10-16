@@ -110,6 +110,7 @@ $.fn.relatedSelects = function( options ){
 
 				// if this select box is satisfied, run it.
 				if( satisfied.length === self.dependencies.length ){
+                    this.satisfied = satisfied;
 					self._fetch( this );
 				}
 			})
@@ -243,9 +244,21 @@ $.fn.relatedSelects = function( options ){
             if( typeof this.options.formIdVar === "string" ){
                 param_string += "&" + this.options.formIdVar + "=" + $(this.form).attr('id');
             }
-            if( typeof this.options.selectIdVar === "string" ){
-                param_string += "&" + this.options.selectIdVar + "=" + $(this.element).attr('id');
+            if( typeof this.options.dependencyToLoadVar === "string" ){
+                param_string += "&" + this.options.dependencyToLoadVar + "=" + $(this.element).attr('id');
             }
+            if( typeof this.options.selectIdVar === "string" ){
+                var next_dependency = $.each(this.dependencies, function(elem){
+                    if($.inArray(elem.name, this.satisfied) === -1){
+                        return elem;
+                    }
+                });
+                if(next_dependency){
+                    param_string += "&" + this.options.selectIdVar + "=" + $(next_dependency).attr('id');
+                }
+
+            }
+
 			return $.param($.map(this.parent.selects, function( obj ){
                 return obj.dependencies;
             })) + param_string;
@@ -266,7 +279,8 @@ $.fn.relatedSelects.options = {
 	disableIfEmpty: false,
     populateOnLoad: true,
     formIdVar:'form_id',
-    selectIdVar: "select_id",
+    selectIdVar: null,
+    dependencyToLoadVar: "dependency_to_load",
 	defaultValue: "",
 	onLoadingStart: $.noop,
 	onLoadingEnd: $.noop,
