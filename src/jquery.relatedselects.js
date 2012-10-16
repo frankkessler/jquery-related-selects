@@ -49,21 +49,20 @@ $.fn.relatedSelects = function( options ){
 			var self = this,
 				opts = self.options,
 				depends = opts.depends,
-				satisfied = self.satisfied,
-				dependencies = self.dependencies;
+				satisfied = self.satisfied;
 
 			// build an array of dependencies
 			if( typeof depends === "string" && depends.length ){
-				dependencies.push( document.getElementById(depends) );
+				self.dependencies.push( document.getElementById(depends) );
 
 			} else if( $.isArray(depends) ){
-				dependencies = $.map(depends, function(elem){
+				self.dependencies = $.map(depends, function(elem){
 					return document.getElementById( elem );
 				});
 			}
 
 			// disable selects that have dependencies
-			if( dependencies.length && !self._isPopulated(self.element, opts)){
+			if( self.dependencies.length && !self._isPopulated(self.element, opts)){
 				self.element.attr("disabled","disabled");
 			}
 
@@ -73,7 +72,7 @@ $.fn.relatedSelects = function( options ){
 			// listen to the change event on each dependency
 			// self obj in here is the elem being updated!
 			// "this" is the calling select box
-			$(dependencies).bind("change.relatedselects", function(){
+			$(self.dependencies).bind("change.relatedselects", function(){
 				// get the relatedselect obj associated with the calling elem
 				var obj = $.data(this, "relatedSelect") || {},
 					o = $.extend({}, opts, obj.options || {}),
@@ -106,11 +105,11 @@ $.fn.relatedSelects = function( options ){
 				}
 
 				// fire onchange callback
-				o.onChange.call( self.element, this, dependencies.length-satisfied.length );
-				self.options.onDependencyChanged.call( self.element, satisfied, dependencies );
+				o.onChange.call( self.element, this, self.dependencies.length-satisfied.length );
+				self.options.onDependencyChanged.call( self.element, satisfied, self.dependencies );
 
 				// if this select box is satisfied, run it.
-				if( satisfied.length === dependencies.length ){
+				if( satisfied.length === self.dependencies.length ){
 					self._fetch( this );
 				}
 			})
@@ -240,10 +239,6 @@ $.fn.relatedSelects = function( options ){
 
 		// builds a query string to pass to the server
 		_buildParams: function(){
-
-			// TODO: test this - i don't think this.parent will be
-			// fully populated when this thing is kicked off
-
 			return $.param($.map(this.parent.selects, function( obj ){
 				return obj.dependencies;
 			}));
