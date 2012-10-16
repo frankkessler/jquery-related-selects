@@ -115,7 +115,7 @@ $.fn.relatedSelects = function( options ){
 				}
 			})
 			.filter(function(){
-				return !(self._isPopulated($(this), opts) && self._isPopulated(self.element, opts)) ;
+				return (self.options.populateOnLoad && !self._isPopulated($(this), opts) && !self._isPopulated(self.element, opts)) ;
 			})
 			.each(function(){
 				$(this).triggerHandler("change.relatedselects");
@@ -262,6 +262,7 @@ $.fn.relatedSelects.options = {
 	dataType: "json",
 	depends: null,
 	disableIfEmpty: false,
+    populateOnLoad: true,
 	defaultValue: "",
 	onLoadingStart: $.noop,
 	onLoadingEnd: $.noop,
