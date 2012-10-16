@@ -239,9 +239,16 @@ $.fn.relatedSelects = function( options ){
 
 		// builds a query string to pass to the server
 		_buildParams: function(){
+            var param_string='';
+            if( typeof this.options.formIdVar === "string" ){
+                param_string += "&" + this.options.formIdVar + "=" + $(this.form).attr('id');
+            }
+            if( typeof this.options.selectIdVar === "string" ){
+                param_string += "&" + this.options.selectIdVar + "=" + $(this.element).attr('id');
+            }
 			return $.param($.map(this.parent.selects, function( obj ){
-				return obj.dependencies;
-			}));
+                return obj.dependencies;
+            })) + param_string;
 		}
 	};
 
@@ -258,6 +265,8 @@ $.fn.relatedSelects.options = {
 	depends: null,
 	disableIfEmpty: false,
     populateOnLoad: true,
+    formIdVar:'form_id',
+    selectIdVar: "select_id",
 	defaultValue: "",
 	onLoadingStart: $.noop,
 	onLoadingEnd: $.noop,
