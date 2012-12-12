@@ -192,7 +192,15 @@ $.fn.relatedSelects = function( options ){
 			// array of objects
 			} else if( $.isArray(data) && data.length ){
 				$.each(data, function(i,obj){
-					html.push('<option value="'+obj.value+'">' + obj.text + '</option>');
+                    if($.isArray(obj.options)){
+                        html.push('<optgroup value="'+obj.value+'">' + obj.text + '</optgroup>');
+                        $.each(obj.options, function(i,option){
+                            html.push('<option value="'+option.value+'">' + option.text + '</option>');
+                        });
+                    }else{
+                        console.log(obj);
+                        html.push('<option value="'+obj.value+'">' + obj.text + '</option>');
+                    }
 				});
 
 			// if the response is invalid/empty, reset the default option
