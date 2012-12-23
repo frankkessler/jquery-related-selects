@@ -193,10 +193,11 @@ $.fn.relatedSelects = function( options ){
 			} else if( $.isArray(data) && data.length ){
 				$.each(data, function(i,obj){
                     if($.isArray(obj.options)){
-                        html.push('<optgroup value="'+obj.value+'">' + obj.text + '</optgroup>');
+                        html.push('<optgroup label="'+obj.text+'">');
                         $.each(obj.options, function(i,option){
                             html.push('<option value="'+option.value+'">' + option.text + '</option>');
                         });
+                        html.push('</optgroup>');
                     }else{
                         console.log(obj);
                         html.push('<option value="'+obj.value+'">' + obj.text + '</option>');
