@@ -245,6 +245,7 @@ $.fn.relatedSelects = function( options ){
 				$selectOptionEls.filter(':first').attr('selected','selected');
 			}
 			select.trigger('change');
+            select.trigger('optionschange');
 		},
 
 		// builds a query string to pass to the server
